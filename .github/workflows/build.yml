@@ -1,0 +1,52 @@
+name: "Build to Branch"
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache pnpm modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 18.x
+      - name: Install PNPM
+        with:
+          run: npm i -g pnpm
+      - name: PNPM Instll
+        with:
+          run: pnpm install
+      - name: Build the extension
+        with:
+          run: pnpm build
+      - name: Deploy to a branch
+        with:
+          run: |
+            TARGET_BRANCH="build-branch"
+            ls
+            git init
+            git branch
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            if git ls-remote --exit-code origin $TARGET_BRANCH; then
+              git fetch origin $TARGET_BRANCH
+              git switch $TARGET_BRANCH
+            else
+              git switch --create $TARGET_BRANCH
+            fi
+            git branch
+            # find . -mindepth 1 ! -name 'build' -exec rm -rf {} +
+            cp -R build dist
+            rm -rf build
+            git status
+            git add .
+            git commit -m "Build output for branch $GITHUB_SHA"
+            git push --force origin $TARGET_BRANCH
