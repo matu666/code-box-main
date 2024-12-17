@@ -42,4 +42,5 @@ jobs:
           rm -rf build
           git add .
           git commit -m "Build output for branch $GITHUB_SHA"
+          git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}.git
           git push --force origin $TARGET_BRANCH
