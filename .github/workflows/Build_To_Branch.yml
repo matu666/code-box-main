@@ -40,7 +40,7 @@ jobs:
           fi
           git branch
           # find . -mindepth 1 ! -name 'build' -exec rm -rf {} +
-          cp -R build dist
+          cp -R build 0build
           rm -rf build
           git status
           git add .
