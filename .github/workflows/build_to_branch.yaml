@@ -36,8 +36,9 @@ jobs:
           else
             git switch --create $TARGET_BRANCH
           fi
+          git branch
           # find . -mindepth 1 ! -name 'build' -exec rm -rf {} +
-          cp -R build/* dist/*
+          cp -R build dist
           rm -rf build
           git add .
           git commit -m "Build output for branch $GITHUB_SHA"
