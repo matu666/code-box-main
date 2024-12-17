@@ -25,10 +25,9 @@ jobs:
         run: pnpm build
       - name: Deploy to a branch
         run: |
-          ls
           TARGET_BRANCH="build-branch"
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           if git ls-remote --exit-code origin $TARGET_BRANCH; then
             git fetch origin $TARGET_BRANCH
             git switch $TARGET_BRANCH
@@ -37,7 +36,7 @@ jobs:
           fi
           # git rm -r --cached . || true
           # rm -rf ./*
-          cp -R build/* .
+          # cp -R build/* .
           git add .
           git commit -m "Build output for branch $GITHUB_SHA"
           git push --force origin $TARGET_BRANCH
