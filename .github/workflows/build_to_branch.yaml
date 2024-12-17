@@ -34,9 +34,9 @@ jobs:
           else
             git switch --create $TARGET_BRANCH
           fi
-          # git rm -r --cached . || true
-          # rm -rf ./*
-          # cp -R build/* .
+          find . -mindepth 1 ! -name 'build' -exec rm -rf {} +
+          cp -R build/* .
+          rm -rf build
           git add .
           git commit -m "Build output for branch $GITHUB_SHA"
           git push --force origin $TARGET_BRANCH
