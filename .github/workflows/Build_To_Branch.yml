@@ -29,8 +29,8 @@ jobs:
           TARGET_BRANCH="build-branch"
           ls build
           git branch
-          git config --local user.name "matu666"
-          git config --local user.email "matu6@qq.com"
+          git config --global user.name "matu666"
+          git config --global user.email "matu6@qq.com"
           if git ls-remote --exit-code origin $TARGET_BRANCH; then
             git checkout $TARGET_BRANCH
           else
@@ -41,6 +41,5 @@ jobs:
           cp -R build/ 0build
           rm -rf build
           git add .
-          git status
           git commit -m "Build output for branch $GITHUB_SHA"
           git push --force origin $TARGET_BRANCH
