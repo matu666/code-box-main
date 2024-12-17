@@ -27,22 +27,20 @@ jobs:
       - name: Deploy to a branch
         run: |
           TARGET_BRANCH="build-branch"
-          ls
-          git init
+          ls build
           git branch
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "matu666"
+          git config --local user.email "matu6@qq.com"
           if git ls-remote --exit-code origin $TARGET_BRANCH; then
-            git fetch origin $TARGET_BRANCH
-            git switch $TARGET_BRANCH
+            git checkout $TARGET_BRANCH
           else
-            git switch --create $TARGET_BRANCH
+            git checkout -b $TARGET_BRANCH
           fi
           git branch
           # find . -mindepth 1 ! -name 'build' -exec rm -rf {} +
-          cp -R build 0build
+          cp -R build/ 0build
           rm -rf build
-          git status
           git add .
+          git status
           git commit -m "Build output for branch $GITHUB_SHA"
           git push --force origin $TARGET_BRANCH
